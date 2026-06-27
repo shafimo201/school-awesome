@@ -42,12 +42,12 @@ func main() {
 	go func() {
 		ctxSeed, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		email := "test@school.org"
+		username := "admin"
 		// Try to fetch; if not found, Register will create the user.
-		if existing, err := userRepo.GetByEmail(ctxSeed, "default-school", email); err != nil || existing == nil {
+		if existing, err := userRepo.GetByEmail(ctxSeed, "default-school", username); err != nil || existing == nil {
 			// create the admin if not exists
 			_, err := userService.Register(ctxSeed, "default-school", "system", usecase.RegisterUserInput{
-				Email:    email,
+				Username: username,
 				FullName: "Admin",
 				Password: "Shafi@123",
 				RoleID:   "admin",
@@ -55,11 +55,11 @@ func main() {
 			if err != nil {
 				logg.Error().Err(err).Msg("failed to seed admin user")
 			} else {
-				logg.Info().Msg("seeded admin user: test@school.org (password: Shafi@123)")
+				logg.Info().Msg("seeded admin user: admin (password: Shafi@123)")
 			}
 		} else {
 			// ensure existing admin has the requested password for local dev
-			if err := userRepo.UpdatePasswordByEmail(ctxSeed, "default-school", email, func() string {
+			if err := userRepo.UpdatePasswordByEmail(ctxSeed, "default-school", username, func() string {
 				h, _ := hasher.Hash("Shafi@123")
 				return h
 			}(), "system"); err != nil {

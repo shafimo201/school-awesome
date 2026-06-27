@@ -80,7 +80,7 @@ func TestRegisterUser_Success(t *testing.T) {
 	service := NewUserService(repo, hasher, logger)
 
 	input := RegisterUserInput{
-		Email:    "user@school.org",
+		Username: "user1",
 		FullName: "Test User",
 		Password: "Password1!",
 		RoleID:   "admin",
@@ -88,7 +88,7 @@ func TestRegisterUser_Success(t *testing.T) {
 
 	user, err := service.Register(context.Background(), "school-123", "system", input)
 	assert.NoError(t, err)
-	assert.Equal(t, "user@school.org", user.Email)
+	assert.Equal(t, "user1", user.Email)
 	assert.Equal(t, "admin", user.RoleID)
 	assert.NotEmpty(t, user.PasswordHash)
 }
@@ -100,7 +100,7 @@ func TestRegisterUser_Existing(t *testing.T) {
 	service := NewUserService(repo, hasher, logger)
 
 	_, err := service.Register(context.Background(), "school-123", "system", RegisterUserInput{
-		Email:    "user@school.org",
+		Username: "user1",
 		FullName: "Test User",
 		Password: "Password1!",
 		RoleID:   "admin",
@@ -108,7 +108,7 @@ func TestRegisterUser_Existing(t *testing.T) {
 	assert.NoError(t, err)
 
 	_, err = service.Register(context.Background(), "school-123", "system", RegisterUserInput{
-		Email:    "user@school.org",
+		Username: "user1",
 		FullName: "Test User",
 		Password: "Password1!",
 		RoleID:   "admin",
@@ -123,16 +123,16 @@ func TestAuthenticate_Success(t *testing.T) {
 	service := NewUserService(repo, hasher, logger)
 
 	_, err := service.Register(context.Background(), "school-123", "system", RegisterUserInput{
-		Email:    "user@school.org",
+		Username: "user1",
 		FullName: "Test User",
 		Password: "Password1!",
 		RoleID:   "admin",
 	})
 	assert.NoError(t, err)
 
-	user, err := service.Authenticate(context.Background(), "school-123", "user@school.org", "Password1!")
+	user, err := service.Authenticate(context.Background(), "school-123", "user1", "Password1!")
 	assert.NoError(t, err)
-	assert.Equal(t, "user@school.org", user.Email)
+	assert.Equal(t, "user1", user.Email)
 }
 
 func TestAuthenticate_InvalidPassword(t *testing.T) {
@@ -142,13 +142,13 @@ func TestAuthenticate_InvalidPassword(t *testing.T) {
 	service := NewUserService(repo, hasher, logger)
 
 	_, err := service.Register(context.Background(), "school-123", "system", RegisterUserInput{
-		Email:    "user@school.org",
+		Username: "user1",
 		FullName: "Test User",
 		Password: "Password1!",
 		RoleID:   "admin",
 	})
 	assert.NoError(t, err)
 
-	_, err = service.Authenticate(context.Background(), "school-123", "user@school.org", "WrongPassword")
+	_, err = service.Authenticate(context.Background(), "school-123", "user1", "WrongPassword")
 	assert.ErrorIs(t, err, ErrInvalidCredentials)
 }

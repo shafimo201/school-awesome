@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
+	"github.com/smoha201/school-awesome/internal/core/domain"
 	"github.com/smoha201/school-awesome/internal/core/port"
 	"github.com/smoha201/school-awesome/internal/pkg/auth"
 )
@@ -89,16 +90,20 @@ func fetchUsers(c *gin.Context, limit, offset int) ([]interface{}, error) {
 
 	result := make([]interface{}, 0, len(users))
 	for _, u := range users {
-		result = append(result, gin.H{
-			"id":         u.ID,
-			"email":      u.Email,
-			"full_name":  u.FullName,
-			"role_id":    u.RoleID,
-			"status":     u.Status,
-			"last_login": u.LastLoginAt,
-		})
+		result = append(result, buildUserResponse(u))
 	}
 	return result, nil
+}
+
+func buildUserResponse(user *domain.User) gin.H {
+	return gin.H{
+		"id":          user.ID,
+		"username":    user.Email,
+		"full_name":   user.FullName,
+		"role_id":     user.RoleID,
+		"status":      user.Status,
+		"last_login":  user.LastLoginAt,
+	}
 }
 
 func RepositoryMiddleware(userRepo port.UserRepository) gin.HandlerFunc {

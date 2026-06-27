@@ -15,7 +15,7 @@ type JWTManager struct {
 type Claims struct {
 	UserID   string `json:"user_id"`
 	SchoolID string `json:"school_id"`
-	Email    string `json:"email"`
+	Username string `json:"username"`
 	jwt.RegisteredClaims
 }
 
@@ -23,13 +23,13 @@ func NewJWTManager(secret string, ttl time.Duration) *JWTManager {
 	return &JWTManager{secret: secret, ttl: ttl}
 }
 
-func (m *JWTManager) Generate(userID, schoolID, email string) (string, time.Time, error) {
+func (m *JWTManager) Generate(userID, schoolID, username string) (string, time.Time, error) {
 	now := time.Now().UTC()
 	expiresAt := now.Add(m.ttl)
 	claims := Claims{
 		UserID:   userID,
 		SchoolID: schoolID,
-		Email:    email,
+		Username: username,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   userID,
 			IssuedAt:  jwt.NewNumericDate(now),

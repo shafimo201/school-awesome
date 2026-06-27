@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 
 function LoginPage({ onLogin }) {
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -29,7 +29,7 @@ function LoginPage({ onLogin }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       })
 
       const data = await res.json()
@@ -65,13 +65,13 @@ function LoginPage({ onLogin }) {
 
         <Box component="form" onSubmit={handleSubmit} noValidate>
           <TextField
-            label="Email address"
-            type="email"
-            autoComplete="email"
+            label="Username or Student ID"
+            type="text"
+            autoComplete="username"
             required
             fullWidth
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
             sx={{ mb: 2 }}
           />
           <TextField

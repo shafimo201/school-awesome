@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, Link } from 'react-router-dom'
 import {
   Container,
   Typography,
@@ -103,7 +103,9 @@ function App() {
 
         {profile?.role_id === 'admin' && (
           <Box sx={{ mb: 3 }}>
-            <Button variant="contained" href="/admin">Admin</Button>
+            <Button variant="contained" component={Link} to="/admin">
+              Admin
+            </Button>
           </Box>
         )}
 
@@ -118,7 +120,7 @@ function App() {
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
-                <TableCell>Email</TableCell>
+                <TableCell>Username</TableCell>
                 <TableCell>Full Name</TableCell>
                 <TableCell>Role</TableCell>
               </TableRow>
@@ -127,7 +129,7 @@ function App() {
               {users.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell>{user.id}</TableCell>
-                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.username}</TableCell>
                   <TableCell>{user.full_name}</TableCell>
                   <TableCell>{user.role_id}</TableCell>
                 </TableRow>
@@ -145,7 +147,21 @@ function App() {
       <Route path="/login" element={token ? <Navigate to="/" replace /> : <LoginPage onLogin={handleLogin} />} />
       <Route
         path="/admin"
-        element={token && profile?.role_id === 'admin' ? <AdminPage token={token} /> : <Navigate to="/" replace />}
+        element={
+          token ? (
+            loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+                <CircularProgress />
+              </Box>
+            ) : profile?.role_id === 'admin' ? (
+              <AdminPage token={token} />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
       />
       <Route path="*" element={<Navigate to={token ? '/' : '/login'} replace />} />
     </Routes>

@@ -10,7 +10,7 @@ import (
 )
 
 type loginRequest struct {
-	Email    string `json:"email" binding:"required,email"`
+	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required,min=8"`
 }
 
@@ -20,7 +20,7 @@ type loginResponse struct {
 }
 
 type createUserRequest struct {
-	Email    string `json:"email" binding:"required,email"`
+	Username string `json:"username" binding:"required"`
 	FullName string `json:"full_name" binding:"required,min=3"`
 	Password string `json:"password" binding:"required,min=8"`
 }
@@ -33,7 +33,7 @@ func LoginHandler(userService *usecase.UserService, jwtManager *auth.JWTManager)
 			return
 		}
 
-		user, err := userService.Authenticate(c.Request.Context(), "default-school", req.Email, req.Password)
+		user, err := userService.Authenticate(c.Request.Context(), "default-school", req.Username, req.Password)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "invalid credentials"})
 			return
@@ -84,13 +84,7 @@ func MeHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"id":        user.ID,
-		"email":     user.Email,
-		"full_name": user.FullName,
-		"role_id":   user.RoleID,
-		"status":    user.Status,
-	})
+	c.JSON(http.StatusOK, buildUserResponse(user))
 }
 
 func CreateStudentHandler(userService *usecase.UserService) gin.HandlerFunc {
@@ -102,7 +96,7 @@ func CreateStudentHandler(userService *usecase.UserService) gin.HandlerFunc {
 		}
 
 		user, err := userService.Register(c.Request.Context(), "default-school", "admin", usecase.RegisterUserInput{
-			Email:    req.Email,
+			Username: req.Username,
 			FullName: req.FullName,
 			Password: req.Password,
 			RoleID:   "student",
@@ -112,7 +106,7 @@ func CreateStudentHandler(userService *usecase.UserService) gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusCreated, gin.H{"id": user.ID, "email": user.Email})
+		c.JSON(http.StatusCreated, buildUserResponse(user))
 	}
 }
 
@@ -125,7 +119,7 @@ func CreateTeacherHandler(userService *usecase.UserService) gin.HandlerFunc {
 		}
 
 		user, err := userService.Register(c.Request.Context(), "default-school", "admin", usecase.RegisterUserInput{
-			Email:    req.Email,
+			Username: req.Username,
 			FullName: req.FullName,
 			Password: req.Password,
 			RoleID:   "teacher",
@@ -135,6 +129,6 @@ func CreateTeacherHandler(userService *usecase.UserService) gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusCreated, gin.H{"id": user.ID, "email": user.Email})
+		c.JSON(http.StatusCreated, buildUserResponse(user))
 	}
 }

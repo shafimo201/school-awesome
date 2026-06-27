@@ -11,7 +11,7 @@ const (
 
 type User struct {
 	AuditFields
-	Email        string     `json:"email" db:"email"`
+	Email        string     `json:"username" db:"email"`
 	FullName     string     `json:"full_name" db:"full_name"`
 	PasswordHash string     `json:"-" db:"password_hash"`
 	RoleID       string     `json:"role_id" db:"role_id"`

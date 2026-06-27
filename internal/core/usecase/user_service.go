@@ -22,7 +22,7 @@ var (
 )
 
 type RegisterUserInput struct {
-	Email    string `json:"email" validate:"required,email"`
+	Username string `json:"username" validate:"required"`
 	FullName string `json:"full_name" validate:"required,min=3"`
 	Password string `json:"password" validate:"required,min=8"`
 	RoleID   string `json:"role_id" validate:"required"`
@@ -49,8 +49,8 @@ func (s *UserService) Register(ctx context.Context, schoolID, createdBy string, 
 		return nil, err
 	}
 
-	input.Email = strings.TrimSpace(strings.ToLower(input.Email))
-	if existing, _ := s.repo.GetByEmail(ctx, schoolID, input.Email); existing != nil {
+	input.Username = strings.TrimSpace(strings.ToLower(input.Username))
+	if existing, _ := s.repo.GetByEmail(ctx, schoolID, input.Username); existing != nil {
 		return nil, ErrUserAlreadyExists
 	}
 
@@ -69,7 +69,7 @@ func (s *UserService) Register(ctx context.Context, schoolID, createdBy string, 
 			CreatedBy: createdBy,
 			UpdatedBy: createdBy,
 		},
-		Email:        input.Email,
+		Email:        input.Username,
 		FullName:     input.FullName,
 		PasswordHash: passwordHash,
 		RoleID:       input.RoleID,
@@ -83,8 +83,8 @@ func (s *UserService) Register(ctx context.Context, schoolID, createdBy string, 
 	return user, nil
 }
 
-func (s *UserService) Authenticate(ctx context.Context, schoolID, email, password string) (*domain.User, error) {
-	user, err := s.repo.GetByEmail(ctx, schoolID, strings.TrimSpace(strings.ToLower(email)))
+func (s *UserService) Authenticate(ctx context.Context, schoolID, username, password string) (*domain.User, error) {
+	user, err := s.repo.GetByEmail(ctx, schoolID, strings.TrimSpace(strings.ToLower(username)))
 	if err != nil {
 		return nil, ErrUserNotFound
 	}
