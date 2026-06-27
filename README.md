@@ -36,20 +36,70 @@ Enterprise-grade School ERP SaaS platform targeting 1000+ schools. This reposito
 
 ## Docker
 
-Build the container locally:
+Build the backend container locally:
 
 ```bash
 docker build -t school-awesome:latest .
 ```
 
-Run locally:
+Run the backend locally:
 
 ```bash
 docker run --rm -p 8080:8080 \
-  -e DATABASE_DSN="postgres://user:pass@localhost:5432/school_erp?sslmode=disable" \
+  -e DATABASE_DSN="postgres://postgres:postgres@localhost:5432/school_awesome_dev?sslmode=disable" \
   -e JWT_SECRET="your-secret" \
   school-awesome:latest
 ```
+
+## Frontend UI
+
+A React + MUI frontend is included under `frontend/`.
+
+Start it locally:
+
+```bash
+cd frontend
+npm install
+npm run dev -- --host 0.0.0.0
+```
+
+Then open:
+
+- `http://localhost:3000`
+
+The frontend proxies `/api` requests to the backend at `http://localhost:8080`.
+
+## Local Docker Compose
+
+A simple local stack is provided by `docker-compose.yml`:
+
+```bash
+docker compose up --build
+```
+
+It starts:
+
+- `db` — PostgreSQL 15
+- `app` — School Awesome backend
+- `frontend` — React UI on port 3000
+
+The app will be available at `http://localhost:8080` and UI at `http://localhost:3000`.
+
+To stop and remove containers:
+
+```bash
+docker compose down
+```
+
+### Database migrations
+
+Use Goose to initialize schema locally after the database service is healthy:
+
+```bash
+docker compose run --rm app goose -dir migrations postgres "$DATABASE_DSN" up
+```
+
+> The local compose environment reads variables from `.env` if present.
 
 ## GitHub Actions
 
