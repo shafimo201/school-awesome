@@ -22,6 +22,7 @@ Enterprise-grade School ERP SaaS platform targeting 1000+ schools. This reposito
 - `FEATURES.md` — future roadmap and feature planning
 - `DEPLOYMENT.md` — deployment guide and hosting options
 - `MOBILE.md` — mobile app plan and free hosting guide
+- `FREE_HOSTING.md` — step-by-step free hosting plan
 
 ## Getting Started
 
