@@ -1,6 +1,6 @@
-# School ERP SaaS Platform
+# School Awesome
 
-Enterprise-grade School ERP targeting 1000+ schools. This repository contains a Go backend designed for production deployment on AWS EKS with PostgreSQL, Redis, and observability.
+Enterprise-grade School ERP SaaS platform targeting 1000+ schools. This repository contains a Go backend designed for production deployment on AWS EKS with PostgreSQL, Redis, and observability.
 
 ## Architecture
 
@@ -24,7 +24,45 @@ Enterprise-grade School ERP targeting 1000+ schools. This repository contains a 
 
 1. Install Go 1.24+
 2. Install dependencies: `go mod tidy`
-3. Run local server: `go run ./cmd/server`
+3. Set required environment variables:
+   ```bash
+   export DATABASE_DSN="postgres://user:pass@localhost:5432/school_erp?sslmode=disable"
+   export JWT_SECRET="your-secret"
+   ```
+4. Run local server:
+   ```bash
+   go run ./cmd/server/main.go
+   ```
+
+## Docker
+
+Build the container locally:
+
+```bash
+docker build -t school-awesome:latest .
+```
+
+Run locally:
+
+```bash
+docker run --rm -p 8080:8080 \
+  -e DATABASE_DSN="postgres://user:pass@localhost:5432/school_erp?sslmode=disable" \
+  -e JWT_SECRET="your-secret" \
+  school-awesome:latest
+```
+
+## GitHub Actions
+
+The repository includes a GitHub Actions workflow at `.github/workflows/ci.yml` that:
+
+- checks out the repository
+- sets up Go 1.24
+- caches Go modules
+- installs dependencies
+- runs `go test ./...`
+- builds the Docker image
+
+To publish Docker images from CI, add `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets.
 
 ## Production Requirements
 
