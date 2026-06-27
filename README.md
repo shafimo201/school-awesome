@@ -99,6 +99,26 @@ Use Goose to initialize schema locally after the database service is healthy:
 docker compose run --rm app goose -dir migrations postgres "$DATABASE_DSN" up
 ```
 
+This will apply both the schema migration and the seeded default user.
+
+### Default local login
+
+After migrations run, use this test account:
+
+- Email: `user@school.org`
+- Password: `Password1!`
+
+If the frontend is running, open `http://localhost:3000/login` and sign in.
+
+If you want to test the backend directly:
+```bash
+curl -X POST http://localhost:8080/api/v1/auth/login \
+   -H "Content-Type: application/json" \
+   -d '{"email":"user@school.org","password":"Password1!"}'
+```
+
+If successful, the response will include `access_token` and `expires_at`.
+
 > The local compose environment reads variables from `.env` if present.
 
 ## GitHub Actions

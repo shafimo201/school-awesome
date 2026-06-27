@@ -11,4 +11,4 @@ if [[ -z "${JWT_SECRET:-}" ]]; then
   exit 1
 fi
 
-go run ./cmd/server/main.go
+exec go run ./cmd/server/main.go

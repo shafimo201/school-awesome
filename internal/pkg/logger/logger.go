@@ -3,13 +3,14 @@ package logger
 import (
 	"io"
 	"os"
+	"time"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
 func New(level string) zerolog.Logger {
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	zerolog.TimeFieldFormat = time.RFC3339
 	out := zerolog.ConsoleWriter{Out: os.Stdout}
 	logger := zerolog.New(out).With().Timestamp().Logger()
 

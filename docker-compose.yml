@@ -32,9 +32,10 @@ services:
       - /app/frontend/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - BACKEND_URL=http://app:8080
     ports:
       - '3000:3000'
-    command: ["sh", "-c", "cd /app/frontend && npm install && npm run dev -- --host 0.0.0.0"]
+    command: ["sh", "-c", "cd /app/frontend && npm install && npm run dev -- --host 0.0.0.0 --port 3000"]
     depends_on:
       - app
 

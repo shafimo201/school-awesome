@@ -10,6 +10,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/smoha201/school-awesome/internal/core/domain"
 	"github.com/smoha201/school-awesome/internal/pkg/auth"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type mockUserRepo struct {
@@ -65,7 +66,7 @@ func (m *mockUserRepo) SoftDelete(_ context.Context, schoolID, id, deletedBy str
 		if u.ID == id && u.SchoolID == schoolID {
 			now := time.Now().UTC()
 			u.DeletedAt = &now
-			u.DeletedBy = deletedBy
+			u.DeletedBy = &deletedBy
 			return nil
 		}
 	}
