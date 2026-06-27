@@ -19,6 +19,9 @@ Enterprise-grade School ERP SaaS platform targeting 1000+ schools. This reposito
 - `deployments/` — Helm charts and K8s manifests
 - `scripts/` — utility scripts for dev and infra
 - `migrations/` — Goose DB migrations
+- `FEATURES.md` — future roadmap and feature planning
+- `DEPLOYMENT.md` — deployment guide and hosting options
+- `MOBILE.md` — mobile app plan and free hosting guide
 
 ## Getting Started
 
