@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/school-erp/project-school/internal/pkg/config"
-	"github.com/school-erp/project-school/internal/pkg/logger"
-	"github.com/school-erp/project-school/internal/pkg/server"
-	"github.com/school-erp/project-school/internal/adapter/db"
-	"github.com/school-erp/project-school/internal/adapter/api"
+	"github.com/smoha201/school-awesome/internal/pkg/config"
+	"github.com/smoha201/school-awesome/internal/pkg/logger"
+	"github.com/smoha201/school-awesome/internal/pkg/server"
+	"github.com/smoha201/school-awesome/internal/adapter/db"
+	"github.com/smoha201/school-awesome/internal/adapter/api"
 )
 
 func main() {

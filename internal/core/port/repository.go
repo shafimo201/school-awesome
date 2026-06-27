@@ -3,7 +3,7 @@ package port
 import (
 	"context"
 
-	"github.com/school-erp/project-school/internal/core/domain"
+	"github.com/smoha201/school-awesome/internal/core/domain"
 )
 
 type UserRepository interface {

@@ -1,10 +1,10 @@
-FROM golang:1.24-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /workspace
 
 RUN apk add --no-cache git ca-certificates gcc musl-dev
 
-COPY go.mod go.sum ./
+COPY go.mod ./
 RUN go mod download
 
 COPY . .

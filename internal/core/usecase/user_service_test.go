@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/rs/zerolog"
-	"github.com/school-erp/project-school/internal/core/domain"
-	"github.com/school-erp/project-school/internal/pkg/auth"
+	"github.com/smoha201/school-awesome/internal/core/domain"
+	"github.com/smoha201/school-awesome/internal/pkg/auth"
 )
 
 type mockUserRepo struct {

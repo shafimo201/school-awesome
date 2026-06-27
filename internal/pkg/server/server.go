@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog"
-	"github.com/school-erp/project-school/internal/pkg/config"
-	"github.com/school-erp/project-school/internal/adapter/api"
+	"github.com/smoha201/school-awesome/internal/pkg/config"
+	"github.com/smoha201/school-awesome/internal/adapter/api"
 )
 
 func New(cfg *config.Config, db *pgxpool.Pool, logger zerolog.Logger) *http.Server {
