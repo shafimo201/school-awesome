@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  read_timeout: 15s
+  write_timeout: 15s
+  idle_timeout: 120s
+
+database:
+  dsn: "${DATABASE_DSN}"
+  max_open_conns: 50
+  max_idle_conns: 10
+  conn_max_lifetime: 30m
+
+redis:
+  addr: "${REDIS_ADDR}"
+  password: "${REDIS_PASSWORD}"
+  db: 0
+
+auth:
+  jwt_secret: "${JWT_SECRET}"
+  access_token_ttl: 15m
+  refresh_token_ttl: 168h
+  issuer: "school-erp"
+
+telemetry:
+  prometheus_path: "/metrics"
+  otlp_endpoint: "${OTEL_EXPORTER_OTLP_ENDPOINT}"

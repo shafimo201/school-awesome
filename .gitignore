@@ -1,0 +1,28 @@
+# Binaries
+/bin/
+
+# Dependency directories
+/vendor/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+
+# Logs
+*.log
+
+# Environment files
+.env*
+
+# Build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test output
+coverage.out
