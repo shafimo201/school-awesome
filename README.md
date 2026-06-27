@@ -71,21 +71,31 @@ The frontend proxies `/api` requests to the backend at `http://localhost:8080`.
 
 ## Local Docker Compose
 
-A simple local stack is provided by `docker-compose.yml`:
+A simple local stack is provided by `docker-compose.yml`.
+
+Start the full stack:
 
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
 
 It starts:
 
-- `db` — PostgreSQL 15
-- `app` — School Awesome backend
-- `frontend` — React UI on port 3000
+- `db` — PostgreSQL 15 on `localhost:5432`
+- `app` — backend on `localhost:8080`
+- `frontend` — React UI on `localhost:3000`
 
-The app will be available at `http://localhost:8080` and UI at `http://localhost:3000`.
+Local accessible endpoints:
 
-To stop and remove containers:
+- Frontend UI: `http://localhost:3000`
+- Backend health: `http://localhost:8080/health`
+- API login: `POST http://localhost:8080/api/v1/auth/login`
+- Current user: `GET http://localhost:8080/api/v1/me`
+- User list: `GET http://localhost:8080/api/v1/users`
+- Create student: `POST http://localhost:8080/api/v1/admin/students`
+- Create teacher: `POST http://localhost:8080/api/v1/admin/teachers`
+
+Stop and remove containers:
 
 ```bash
 docker compose down
@@ -99,27 +109,42 @@ Use Goose to initialize schema locally after the database service is healthy:
 docker compose run --rm app goose -dir migrations postgres "$DATABASE_DSN" up
 ```
 
-This will apply both the schema migration and the seeded default user.
+This will apply the schema migration and seed the default admin user.
 
 ### Default local login
 
-After migrations run, use this test account:
+The local stack seeds a default admin user automatically:
 
-- Email: `user@school.org`
-- Password: `Password1!`
+- Username: `admin`
+- Password: `Shafi@123`
 
-If the frontend is running, open `http://localhost:3000/login` and sign in.
+Open the UI at `http://localhost:3000` and sign in, or test the backend directly:
 
-If you want to test the backend directly:
 ```bash
 curl -X POST http://localhost:8080/api/v1/auth/login \
-   -H "Content-Type: application/json" \
-   -d '{"email":"user@school.org","password":"Password1!"}'
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"Shafi@123"}'
 ```
 
-If successful, the response will include `access_token` and `expires_at`.
+A successful response includes `access_token` and `expires_at`.
 
 > The local compose environment reads variables from `.env` if present.
+
+### Local compose troubleshooting
+
+- If ports are already in use, stop the conflicting service or change the ports in `docker-compose.yml`.
+- If the backend build fails, check the console for Go compile errors and fix any missing imports or handler types.
+- If the frontend cannot connect, ensure `frontend` is running and the `BACKEND_URL` value points to `http://app:8080` inside Docker.
+- To see logs for all services:
+
+```bash
+docker compose logs -f
+```
+- To remove stale volumes and rebuild cleanly:
+
+```bash
+docker compose down -v && docker compose up --build -d
+```
 
 ## GitHub Actions
 
